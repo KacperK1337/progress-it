@@ -1,0 +1,101 @@
+# Builds Progress It for macOS, Windows and Linux and attaches the installers to a draft
+# GitHub release named after the app version (e.g. v0.1.0).
+#
+# Run it by pushing a version tag:   git tag v0.1.0 && git push origin v0.1.0
+# or by hand: Actions tab → Release → Run workflow.
+# Then review the draft release on GitHub and publish it.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  # tauri-action names the release after the version in tauri.conf.json, not after the
+  # tag. If the three version numbers drift apart, the release lands on the wrong tag,
+  # so stop before building anything.
+  version:
+    name: Versions match
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check package.json, Cargo.toml, tauri.conf.json and the tag
+        run: |
+          conf=$(jq -r .version src-tauri/tauri.conf.json)
+          pkg=$(jq -r .version package.json)
+          cargo=$(sed -n 's/^version = "\(.*\)"$/\1/p' src-tauri/Cargo.toml | head -1)
+          echo "tauri.conf.json=$conf package.json=$pkg Cargo.toml=$cargo"
+          if [ "$conf" != "$pkg" ] || [ "$conf" != "$cargo" ]; then
+            echo "::error::version numbers differ; set the same one in all three files"
+            exit 1
+          fi
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "v$conf" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match version v$conf"
+            exit 1
+          fi
+
+  build:
+    needs: version
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest # Apple Silicon Macs (M1 and newer)
+            args: --target aarch64-apple-darwin
+          - platform: macos-latest # Intel Macs
+            args: --target x86_64-apple-darwin
+          - platform: ubuntu-22.04 # older Ubuntu = .AppImage/.deb work on more distros
+            args: ''
+          - platform: windows-latest
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build and upload to the draft release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v__VERSION__ # replaced with the version from src-tauri/tauri.conf.json
+          releaseName: Progress It v__VERSION__
+          releaseBody: |
+            Download the file for your system below.
+
+            - **macOS:** `.dmg` (`aarch64` = Apple Silicon M1 and newer, `x64` = Intel)
+            - **Windows:** `-setup.exe` (or `.msi`)
+            - **Linux:** `.AppImage` (any distro), `.deb` (Ubuntu/Debian) or `.rpm` (Fedora/openSUSE)
+
+            These builds are not code-signed, so macOS and Windows show a warning the first time you open the app.
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

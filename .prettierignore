@@ -1,0 +1,10 @@
+# Build output and dependencies
+dist/
+node_modules/
+package-lock.json
+
+# Backend: formatted by rustfmt (see .github/workflows/backend.yml)
+src-tauri/
+
+# Editor files
+.idea/

@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Frontend build output
+dist/
+
+# Rust / Tauri build output and generated files
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# Logs and caches
+*.log
+npm-debug.log*
+.vite/
+*.tsbuildinfo
+coverage/
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Playwright MCP screenshots and snapshots
+.playwright-mcp/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and editors
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.fleet/
+.zed/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Claude Code local settings
+.claude/settings.local.json
