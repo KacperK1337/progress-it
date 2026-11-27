@@ -1,13 +1,10 @@
-# Backend (Rust) checks: formatting, lint and tests.
-# Runs on every pull request, and again on main so the merged result is checked too.
-name: Backend checks
+name: BE checks
 
 on:
   pull_request:
   push:
     branches: [main]
 
-# A newer push to the same PR (or to main) cancels the older run.
 concurrency:
   group: backend-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -15,7 +12,7 @@ concurrency:
 jobs:
   backend:
     name: Rust (format, lint, test)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-26.04
     defaults:
       run:
         working-directory: src-tauri

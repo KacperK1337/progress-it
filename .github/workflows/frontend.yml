@@ -1,13 +1,10 @@
-# Frontend (Svelte + TypeScript) checks: formatting, lint, type check and tests.
-# Runs on every pull request, and again on main so the merged result is checked too.
-name: Frontend checks
+name: FE checks
 
 on:
   pull_request:
   push:
     branches: [main]
 
-# A newer push to the same PR (or to main) cancels the older run.
 concurrency:
   group: frontend-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -15,13 +12,13 @@ concurrency:
 jobs:
   frontend:
     name: Svelte (format, lint, test)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v7
         with:
-          node-version: lts/*
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
