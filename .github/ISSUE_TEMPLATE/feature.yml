@@ -1,0 +1,23 @@
+name: Feature
+description: To use if you want something new or want something to work differently
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 'Description'
+      placeholder: Describe shortly what you need
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 'Design suggestions'
+      placeholder: How you would see it
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 'Additional info'
+      placeholder: Anything else important for this issue

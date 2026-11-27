@@ -10,9 +10,9 @@
 
 <!-- Add test cases you did -->
 
-- [ ] a
-- [ ] b
+- [ ] test1
+- [ ] test2
 
 ### Screenshots/Videos
 
-<!-- Optional visuals. -->
+<!-- Optional visuals -->

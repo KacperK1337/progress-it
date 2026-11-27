@@ -1,13 +1,12 @@
-name: Bug report
-description: Use if something doesn't work and needs a fix.
-title: '[Bug]: '
+name: Bug
+description: To use if something doesn't work and needs a fix
 labels: ['bug']
 body:
   - type: textarea
     id: description
     attributes:
       label: 'Description'
-      description: Describe the bug.
+      placeholder: Describe shortly the problem
     validations:
       required: true
 
@@ -26,6 +25,7 @@ body:
     id: os
     attributes:
       label: 'Operating system'
+      multiple: true
       options:
         - macOS (Apple Silicon)
         - macOS (Intel)
@@ -37,13 +37,13 @@ body:
   - type: input
     id: app-version
     attributes:
-      label: Progress It version
-      placeholder: e.g. '0.1.0' or 'latest'
+      label: 'App version'
+      placeholder: e.g. '0.1.0' or 'latest', if multiple - please specify
     validations:
       required: true
 
   - type: textarea
-    id: extra
+    id: additional
     attributes:
-      label: Additional info
-      description: Anything else that helps (screenshots, screen recordings, error messages etc).
+      label: 'Additional info'
+      placeholder: Anything else important for this issue
