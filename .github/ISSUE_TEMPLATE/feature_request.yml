@@ -1,0 +1,27 @@
+name: Feature request
+description: Use if you want something new or want it to work differently.
+title: '[Feature]: '
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 'Description'
+      description: Describe the feature request.
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 'Implementation options'
+      description: Possible ways this feature could work or be built.
+      placeholder: |
+        1. Add a button to the toolbar that ...
+        2. Show a setting that ...
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional info
+      description: Anything else that you like to share.
