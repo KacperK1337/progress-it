@@ -61,7 +61,7 @@ The app isn't code-signed yet, so macOS and Windows warn you the first time you 
 ## Run from source
 
 Alternatively you can clone the repo and run app locally.
-You need [Node.js](https://nodejs.org) 20+ and [Rust](https://rustup.rs). On Linux, also
+You need [Node.js](https://nodejs.org) 26.13.1+ (npm 11.20.0+) and [Rust](https://rustup.rs). On Linux, also
 install the [Tauri system dependencies](https://tauri.app/start/prerequisites/#linux).
 
 ```sh
