@@ -1,0 +1,12 @@
+# Settings for the "New issue" page.
+
+# true: people can also open an empty issue without using a template.
+# false: people must pick one of the templates in this folder (bug report or feature request).
+blank_issues_enabled: false
+
+# Extra links listed under the templates on the "New issue" page, for example to send
+# questions to Discussions instead of issues. Uncomment and edit to use.
+# contact_links:
+#   - name: Questions
+#     url: https://github.com/KacperK1337/progress-it/discussions
+#     about: Ask and answer questions here.
